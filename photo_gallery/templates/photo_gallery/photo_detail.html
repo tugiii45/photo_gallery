@@ -51,6 +51,31 @@
 
     </div>
 
+<div class="flex gap-4 mt-8">
+
+    <form method="POST" action="{% url 'like_photo' photo.id %}">
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="px-5 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-700 transition"
+        >
+            👍 Like {{ photo.likes.count }}
+        </button>
+    </form>
+
+    <form method="POST" action="{% url 'dislike_photo' photo.id %}">
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="px-5 py-3 bg-gray-200 text-gray-900 rounded-lg hover:bg-gray-300 transition"
+        >
+            👎 Dislike {{ photo.dislikes.count }}
+        </button>
+    </form>
+
+</div>
 </section>
 
 {% endblock %}

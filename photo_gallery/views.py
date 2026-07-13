@@ -49,6 +49,43 @@ def photo_detail(request, photo_id):
         {"photo": photo},
     )
 
+@login_required
+def like_photo(request, photo_id):
+    """
+    Allows a user to like or remove their like from a photo.
+    """
+
+    photo = get_object_or_404(Photo, id=photo_id)
+
+    if request.method == "POST":
+        if request.user in photo.likes.all():
+            photo.likes.remove(request.user)
+        else:
+            photo.likes.add(request.user)
+            photo.dislikes.remove(request.user)
+
+    return redirect("photo_detail", photo_id=photo.id)
+
+
+@login_required
+def dislike_photo(request, photo_id):
+    """
+    Allows a user to dislike or remove their dislike from a photo.
+    """
+
+    photo = get_object_or_404(Photo, id=photo_id)
+
+    if request.method == "POST":
+        if request.user in photo.dislikes.all():
+            photo.dislikes.remove(request.user)
+        else:
+            photo.dislikes.add(request.user)
+            photo.likes.remove(request.user)
+
+    return redirect("photo_detail", photo_id=photo.id)
+
+
+
 def register(request):
     """
     Registers a new user account.
