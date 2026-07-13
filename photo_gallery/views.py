@@ -6,20 +6,35 @@ from .forms import UserRegistrationForm, UserLoginForm
 from .models import *
 from django.shortcuts import render, redirect, get_object_or_404
 
+
 @login_required
 def home(request):
     """
-    Displays all photos in the gallery.
+    Displays gallery photos and filters them by tag.
     """
 
     photos = Photo.objects.all().order_by("-created_at")
+    selected_tag = request.GET.get("tag")
+
+    if selected_tag:
+        photos = photos.filter(tags__icontains=selected_tag)
+
+    all_photos = Photo.objects.all()
+    tags = set()
+
+    for photo in all_photos:
+        for tag in photo.tags.split(","):
+            tags.add(tag.strip())
 
     return render(
         request,
         "photo_gallery/home.html",
-        {"photos": photos},
+        {
+            "photos": photos,
+            "tags": sorted(tags),
+            "selected_tag": selected_tag,
+        },
     )
-
 @login_required
 def photo_detail(request, photo_id):
     """
