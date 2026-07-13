@@ -11,4 +11,5 @@ urlpatterns = [
     path("photo/<int:photo_id>/like/",views.like_photo,name="like_photo"),
     path("photo/<int:photo_id>/dislike/",views.dislike_photo, name="dislike_photo"),
     path("profile/", views.profile, name="profile"),
+    path("profile/change-password/",views.change_password,name="change_password"),
 ]

@@ -1,10 +1,12 @@
 from django.contrib import messages
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, update_session_auth_hash
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm, UserLoginForm, UserUpdateForm, ProfileUpdateForm
 from .models import *
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.forms import PasswordChangeForm
+
 
 
 @login_required
@@ -128,6 +130,42 @@ def profile(request):
             "user_form": user_form,
             "profile_form": profile_form,
         },
+    )
+
+@login_required
+def change_password(request):
+    """
+    Allows an authenticated user to securely change their password.
+    """
+
+    if request.method == "POST":
+        form = PasswordChangeForm(
+            request.user,
+            request.POST,
+        )
+
+        if form.is_valid():
+            user = form.save()
+
+            update_session_auth_hash(
+                request,
+                user,
+            )
+
+            messages.success(
+                request,
+                "Your password has been changed successfully.",
+            )
+
+            return redirect("profile")
+
+    else:
+        form = PasswordChangeForm(request.user)
+
+    return render(
+        request,
+        "photo_gallery/change_password.html",
+        {"form": form},
     )
 
 def register(request):
