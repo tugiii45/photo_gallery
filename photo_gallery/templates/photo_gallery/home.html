@@ -16,17 +16,60 @@
         </p>
     </div>
 
-    <div class="bg-white border border-gray-200 rounded-xl p-10 text-center">
+    {% if photos %}
 
-        <h2 class="text-2xl font-semibold text-gray-900">
-            Photos coming soon
-        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
-        <p class="text-gray-500 mt-2">
-            The gallery is ready for amazing photography.
-        </p>
+            {% for photo in photos %}
 
-    </div>
+                <a
+                    href="{% url 'photo_detail' photo.id %}"
+                    class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition"
+                >
+
+                    <img
+                        src="{{ photo.image.url }}"
+                        alt="{{ photo.title }}"
+                        class="w-full h-72 object-cover"
+                    >
+
+                    <div class="p-5">
+
+                        <h2 class="text-xl font-bold text-gray-900">
+                            {{ photo.title }}
+                        </h2>
+
+                        <p class="text-gray-500 mt-2">
+                            {{ photo.description|truncatewords:15 }}
+                        </p>
+
+                        <p class="text-sm text-gray-400 mt-4">
+                            {{ photo.tags }}
+                        </p>
+
+                    </div>
+
+                </a>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="bg-white border border-gray-200 rounded-xl p-10 text-center">
+
+            <h2 class="text-2xl font-semibold text-gray-900">
+                No photos available
+            </h2>
+
+            <p class="text-gray-500 mt-2">
+                Photos added to the gallery will appear here.
+            </p>
+
+        </div>
+
+    {% endif %}
 
 </section>
 
