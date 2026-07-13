@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from .models import Profile
 
 
 INPUT_CLASSES = (
@@ -54,3 +55,36 @@ class UserLoginForm(AuthenticationForm):
             attrs={"class": INPUT_CLASSES}
         ),
     )
+
+class UserUpdateForm(forms.ModelForm):
+    """
+    Allows users to update their email address.
+    """
+
+    class Meta:
+        model = User
+        fields = ("email",)
+        widgets = {
+            "email": forms.EmailInput(
+                attrs={"class": INPUT_CLASSES}
+            ),
+        }
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    """
+    Allows users to update their bio and profile picture.
+    """
+
+    class Meta:
+        model = Profile
+        fields = ("bio", "profile_picture")
+        widgets = {
+            "bio": forms.Textarea(
+                attrs={
+                    "class": INPUT_CLASSES,
+                    "rows": 5,
+                    "placeholder": "Tell us about yourself...",
+                }
+            ),
+        }    

@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegistrationForm, UserLoginForm
+from .forms import UserRegistrationForm, UserLoginForm, UserUpdateForm, ProfileUpdateForm
 from .models import *
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -88,15 +88,47 @@ def dislike_photo(request, photo_id):
 @login_required
 def profile(request):
     """
-    Displays the authenticated user's profile.
+    Displays and updates the authenticated user's profile.
     """
+
+    user_profile = request.user.profile
+
+    if request.method == "POST":
+        user_form = UserUpdateForm(
+            request.POST,
+            instance=request.user,
+        )
+
+        profile_form = ProfileUpdateForm(
+            request.POST,
+            request.FILES,
+            instance=user_profile,
+        )
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+
+            messages.success(
+                request,
+                "Your profile has been updated successfully.",
+            )
+
+            return redirect("profile")
+
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=user_profile)
 
     return render(
         request,
         "photo_gallery/profile.html",
-        {"profile": request.user.profile},
+        {
+            "profile": user_profile,
+            "user_form": user_form,
+            "profile_form": profile_form,
+        },
     )
-
 
 def register(request):
     """
