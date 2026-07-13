@@ -1,9 +1,20 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
-
+from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm, UserLoginForm
 
+
+@login_required
+def home(request):
+    """
+    Displays the photo gallery homepage to authenticated users.
+    """
+
+    return render(
+        request,
+        "photo_gallery/home.html",
+    )
 
 def register(request):
     """
