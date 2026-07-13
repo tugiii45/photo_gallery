@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <title>{% block title %}Photo Gallery{% endblock %}</title>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+    <nav class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold">
+                PhotoGallery
+            </a>
+
+            <div class="flex items-center gap-5">
+                {% if user.is_authenticated %}
+                    <span class="text-gray-300">
+                        Hello, {{ user.username }}
+                    </span>
+
+                    <a href="{% url 'logout' %}" class="hover:text-gray-300">
+                        Logout
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="hover:text-gray-300">
+                        Login
+                    </a>
+
+                    <a
+                        href="{% url 'register' %}"
+                        class="bg-white text-gray-900 px-4 py-2 rounded-lg"
+                    >
+                        Register
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    {% if messages %}
+        <div class="max-w-4xl mx-auto mt-5 px-6">
+            {% for message in messages %}
+                <div class="bg-green-100 text-green-800 p-4 rounded-lg mb-3">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>
