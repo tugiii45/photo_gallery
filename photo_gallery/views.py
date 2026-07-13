@@ -85,6 +85,18 @@ def dislike_photo(request, photo_id):
     return redirect("photo_detail", photo_id=photo.id)
 
 
+@login_required
+def profile(request):
+    """
+    Displays the authenticated user's profile.
+    """
+
+    return render(
+        request,
+        "photo_gallery/profile.html",
+        {"profile": request.user.profile},
+    )
+
 
 def register(request):
     """
