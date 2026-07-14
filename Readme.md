@@ -286,10 +286,7 @@ git push origin feature/your-feature-name
 9. Open a Pull Request and provide a clear description of your changes.
 
 
-## 👨‍💻 Author
+##  Author
 
 **Conrad Mutugi**
 
-Software Engineering Student
-
-Built as part of a Django web development project.
